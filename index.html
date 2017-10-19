@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="en" ng-app="myApp" ng-controller="GetWeatherController">
+<head>
+    <title ng-bind="'Weather - ' + details.name"></title>
+    <link rel="stylesheet" href="css/animate.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div class="container-fluid">
+
+
+        <h2 class="text-primary text-center">How's the Weather?</h2>
+        <br><br>
+
+        <noscript>
+            <div class="nojs">Javascript is either disabled or not supported in your browser. Please enable it or use a Javascript enabled browser.</div>
+        </noscript>
+
+        <div class="animated zoomInRight">
+            <div class="row">
+                <form ng-submit="submit()">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3 col-xs-6">
+                        <input type="text" class="form-control" ng-model="text" ng-model-options="{ debounce: 1500 }" placeholder="Enter a city" autofocus />
+                    </div>
+                    <div class="col-md-3 col-xs-4">
+                        <button class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i> Get the Weather</button>
+                    </div>
+                    <div class="col-md-3"></div>
+                </form>
+            </div><!--/.row-->
+
+            <div id="main-info" class="col-md-8 col-xs-12">
+                <div ng-if="!details">
+                    Loading results...
+                </div>
+
+                <div ng-if="details.cod===200">
+                    <h3>{{ details.name }}, {{ details.sys.country }}</h3>
+                    <div class="row">
+                        <div class="col-md-2">
+                           
+                            <h1 ng-hide="tempF">{{ details.main.temp | number:1 }} &deg F</h1>
+                   
+                            <h1 ng-show="tempF">{{ (details.main.temp - 32) * (5/9) | number:1 }} &deg C</h1>
+                           
+                        </div>
+                        <div class="col-md-10">
+                            <button class="clear-btn text-shadow" 
+                                    ng-click="tempF = false"
+                                    >F</button>
+                            <button class="clear-btn text-shadow"
+                                    ng-click="tempF = true"
+                                    >C</button>
+                        </div>
+                    </div>
+                        <p>as of {{details.dt * 1000 | date:'MM/dd/yy, h:mm a'}}</p>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <span>
+                                    <img ng-src="http://openweathermap.org/img/w/{{ details.weather[0].icon }}.png" class="thumbnail animated flip movie-poster img-responsive" />
+                                </span>
+                            </div>
+                            <div class="col-md-10">
+                                <h3>{{ details.weather[0].description }}</h3>
+                            </div>
+                        </div>
+
+
+
+
+
+                        <h4>Details</h4>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-7"><p>Humidity</p></div>
+                            <div class="col-md-6 col-xs-5"><p>{{ details.main.humidity }} %</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-7"><p>Wind</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 348.75 && details.wind.deg <= 11.25"><p>N, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 11.26 && details.wind.deg <= 33.75"><p>NNE, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 33.76 && details.wind.deg <= 56.25"><p>NE, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 56.26 && details.wind.deg <= 78.75"><p>ENE, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 78.76 && details.wind.deg <= 101.25"><p>E, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 101.26 && details.wind.deg <= 123.75"><p>ESE, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 123.76 && details.wind.deg <= 146.25"><p>SE, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 146.26 && details.wind.deg <= 168.75"><p>SSE, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 168.76 && details.wind.deg <= 191.25"><p>S, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 191.26 && details.wind.deg <= 213.75"><p>SSW, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 213.76 && details.wind.deg <= 236.25"><p>SW, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 236.26 && details.wind.deg <= 258.75"><p>WSW, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 258.76 && details.wind.deg <= 281.25"><p>W, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 281.26 && details.wind.deg <= 303.75"><p>WNW, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 303.76 && details.wind.deg <= 326.25"><p>NW, {{ details.wind.speed | number:1 }} mph</p></div>
+                            <div class="col-md-6 col-xs-5" ng-if="details.wind.deg >= 326.26 && details.wind.deg <= 348.74"><p>NNW, {{ details.wind.speed | number:1 }} mph</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-7"><p>Clouds</p></div><div class="col-md-6 col-xs-5"><p>{{ details.clouds.all }} %</p></div>
+                        </div>
+                        <div class="row" ng-if="details.rain['3h']">
+                            <!--only show rain if json rain.3h exists. Divide mm by 25.4 to convert inches -->
+                            <div class="col-md-6 col-xs-7" ng-if="details.rain['3h']"><p>Rain</p></div><div class="col-md-6 col-xs-5" ng-if="details.rain['3h']"><p>{{ details.rain["3h"] / 25.4 | number:2 }} in</p></div>
+                        </div>
+                        <div class="row" ng-if="details.snow['3h']">
+                            <!--only show snow if json snow.3h exists -->
+                            <div class="col-md-6 col-xs-7" ng-if="details.snow['3h']"><p>Snow</p></div><div class="col-md-6 col-xs-5" ng-if="details.snow['3h']"><p>{{ details.snow["3h"] / 25.4 | number:2 }} in</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-7"><p>Pressure</p></div><div class="col-md-6 col-xs-5"><p>{{ details.main.pressure * 0.02953 | number:1 }} inHg</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-7"><p>Sunrise</p></div><div class="col-md-6 col-xs-5"><p>{{ details.sys.sunrise * 1000 | date: 'h:mm a'}}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-xs-7"><p>Sunset</p></div><div class="col-md-6 col-xs-5"><p>{{ details.sys.sunset * 1000 | date: 'h:mm a'}}</p></div>
+                        </div>
+
+</div>
+            </div>
+
+        </div>
+    </div><!--/.container-fluid-->
+
+    <script src="Scripts/angular.min.js"></script>
+    <script src="app/app.js"></script>
+</body>
+</html>
